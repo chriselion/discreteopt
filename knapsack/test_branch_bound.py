@@ -29,10 +29,6 @@ def run_on_file(file_location):
     input_data = load_input_data(file_location)
     capacity, items = parse_input(input_data)
 
-    value, taken = solve_greedy(capacity, items)
-    print "GREEDY: %s" % value
-#    print taken
-
     value, taken = solve_branch_bound(capacity, items)
     print "B&B: %s" % value
 #    print taken
@@ -40,12 +36,15 @@ def run_on_file(file_location):
 
 if __name__ == '__main__':
     files = [
-        './knapsack/data/ks_4_0',
-        './knapsack/data/ks_19_0',
+        #'./knapsack/data/ks_4_0',
+        #'./knapsack/data/ks_19_0',
         './knapsack/data/ks_30_0',
         #'./knapsack/data/ks_40_0',
         './knapsack/data/ks_50_0',
         './knapsack/data/ks_200_0',
+        './knapsack/data/ks_400_0',
+        './knapsack/data/ks_1000_0',
+        './knapsack/data/ks_10000_0',
     ]
 
     for f in files:
