@@ -1,5 +1,6 @@
 from . import Item
 import time
+from greedy import solve_greedy
 
 class State:
     def __init__(self):
@@ -8,11 +9,12 @@ class State:
         self.total_weight = 0
         self.parent = None
         self.current_item = None
+        self.best_case = None
 
     def is_valid(self, best_val, capacity, items):
         if self.total_weight > capacity:
             return False
-        best_case = self.get_best_case(items)
+        best_case = self.get_best_case(capacity, items)
         #print "Optimistic: %d  current best: %d" % (best_case, best_val)
         if best_case <= best_val:
             return False
@@ -21,12 +23,37 @@ class State:
     def get_value(self):
         return self.total_value
 
-    def get_best_case(self, items):
-        # Naive approach - best case is current value plus everything not tried yet
+    def get_best_case(self, capacity, items):
+        if not self.best_case:
+            self.best_case = self._get_best_case(capacity, items)
+        return self.best_case
+
+    def _get_best_case(self, capacity, items):
         current_value = self.get_value()
-        for i in xrange(self.index, len(items)):
-            current_value += items[i].value
-        return current_value
+        if False:
+            # Naive approach - best case is current value plus everything not tried yet
+            for i in xrange(self.index, len(items)):
+                current_value += items[i].value
+            return current_value
+        else:
+            # Relaxed problem
+            # We know that the items are sorted by density
+            # So fill up the remaining capacity in order
+            current_weight = self.total_weight
+            for i in xrange(self.index, len(items)):
+                if current_weight + items[i].weight == capacity:
+                    return current_value + items[i].value
+                elif current_weight + items[i].weight < capacity:
+                    current_value += items[i].value
+                    current_weight += items[i].weight
+                else:
+                    remaining = capacity - current_weight
+                    ratio = float(remaining) / items[i].weight
+                    partial_value = int(items[i].value * ratio) + 1
+                    return current_value + partial_value
+            return current_value
+
+
 
     def compute_knapsack(self):
         ks = set()
@@ -45,9 +72,12 @@ def get_taken(knapsack, items):
         taken[i.index] = 1
     return taken
 
-def solve_branch_bound(capacity, items):
+def solve_branch_bound(capacity, items_unsorted):
+    greedy_val, greedy_taken = solve_greedy(capacity, items_unsorted)
+
+    items = sorted(items_unsorted, reverse=True, key=lambda it: float(it.value) / float(it.weight) )
     start_time = time.time()
-    best_val = 0
+    best_val = greedy_val
     best_node = None
 
     current_state = State()
@@ -104,8 +134,13 @@ def solve_branch_bound(capacity, items):
         r_ok = r.is_valid(best_val, capacity, items)
 
         if l_ok and r_ok:
-            stack.append(r)
-            current_state = l
+            if l.best_case > r.best_case:
+                # l has better upside
+                stack.append(r)
+                current_state = l
+            else:
+                stack.append(l)
+                current_state = r
         elif l_ok:
             current_state = l
         elif r_ok:
@@ -116,9 +151,12 @@ def solve_branch_bound(capacity, items):
             else:
                 break
 
-    end_time = time.time();
-    best_set = best_node.compute_knapsack()
+    end_time = time.time()
     print "Branch and Bound for %d items searched %d nodes in %f seconds" % (len(items), num_steps, end_time - start_time)
-    taken = get_taken(best_set, items)
+    if best_node:
+        best_set = best_node.compute_knapsack()
+        taken = get_taken(best_set, items)
+    else:
+        taken = greedy_taken
 
     return best_val, taken

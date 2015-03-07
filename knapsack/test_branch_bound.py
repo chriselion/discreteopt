@@ -31,11 +31,11 @@ def run_on_file(file_location):
 
     value, taken = solve_greedy(capacity, items)
     print "GREEDY: %s" % value
-    print taken
+#    print taken
 
     value, taken = solve_branch_bound(capacity, items)
     print "B&B: %s" % value
-    print taken
+#    print taken
 
 
 if __name__ == '__main__':
@@ -43,8 +43,9 @@ if __name__ == '__main__':
         './knapsack/data/ks_4_0',
         './knapsack/data/ks_19_0',
         './knapsack/data/ks_30_0',
-        './knapsack/data/ks_40_0',
-
+        #'./knapsack/data/ks_40_0',
+        './knapsack/data/ks_50_0',
+        './knapsack/data/ks_200_0',
     ]
 
     for f in files:
