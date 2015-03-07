@@ -25,18 +25,16 @@ def load_input_data(fileLocation):
     return inputData
 
 def run_on_file(file_location):
-    print file_location
+    print "\n" + file_location
     input_data = load_input_data(file_location)
     capacity, items = parse_input(input_data)
 
-    print "GREEDY"
     value, taken = solve_greedy(capacity, items)
-    print value
+    print "GREEDY: %s" % value
     print taken
 
-    print "\nB&B"
     value, taken = solve_branch_bound(capacity, items)
-    print value
+    print "B&B: %s" % value
     print taken
 
 

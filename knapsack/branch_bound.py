@@ -4,9 +4,10 @@ import time
 class State:
     def __init__(self):
         self.index = -1
-        self.knapsack = set()
         self.total_value = 0
         self.total_weight = 0
+        self.parent = None
+        self.current_item = None
 
     def is_valid(self, best_val, capacity, items):
         if self.total_weight > capacity:
@@ -27,6 +28,17 @@ class State:
             current_value += items[i].value
         return current_value
 
+    def compute_knapsack(self):
+        ks = set()
+
+        s = self
+        while s:
+            if s.current_item:
+                ks.add(s.current_item)
+            s = s.parent
+        return ks
+
+
 def get_taken(knapsack, items):
     taken = [0] * len(items)
     for i in knapsack:
@@ -36,7 +48,7 @@ def get_taken(knapsack, items):
 def solve_branch_bound(capacity, items):
     start_time = time.time()
     best_val = 0
-    best_set = set()
+    best_node = None
 
     current_state = State()
     current_state.index = 0
@@ -63,7 +75,7 @@ def solve_branch_bound(capacity, items):
         current_value = current_state.get_value()
         if current_value > best_val:
             best_val = current_value
-            best_set = current_state.knapsack
+            best_node = current_state
 
         #print "Index: %d  num items: %d" % (current_state.index, len(items))
         if current_state.index >= len(items):
@@ -76,16 +88,17 @@ def solve_branch_bound(capacity, items):
         #print "Adding nodes"
         l = State()
         l.index = current_state.index+1
-        l.knapsack = current_state.knapsack.copy()
-        l.knapsack.add(items[current_state.index])
         l.total_value = current_state.total_value + items[current_state.index].value
         l.total_weight = current_state.total_weight + items[current_state.index].weight
+        l.parent = current_state
+        l.current_item = items[current_state.index]
 
         r = State()
         r.index = current_state.index+1
-        r.knapsack = current_state.knapsack.copy()
         r.total_value = current_state.total_value
         r.total_weight = current_state.total_weight
+        r.parent = current_state
+        r.current_item = None
 
         l_ok = l.is_valid(best_val, capacity, items)
         r_ok = r.is_valid(best_val, capacity, items)
@@ -104,6 +117,7 @@ def solve_branch_bound(capacity, items):
                 break
 
     end_time = time.time();
+    best_set = best_node.compute_knapsack()
     print "Branch and Bound for %d items searched %d nodes in %f seconds" % (len(items), num_steps, end_time - start_time)
     taken = get_taken(best_set, items)
 
