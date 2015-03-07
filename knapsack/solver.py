@@ -1,44 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from collections import namedtuple
-Item = namedtuple("Item", ['index', 'value', 'weight'])
-
-def eval_greedy(items, item_count, capacity):
-    # a trivial greedy algorithm for filling the knapsack
-    # it takes items in-order until the knapsack is full
-    value = 0
-    weight = 0
-    taken = [0]*item_count
-
-    for item in items:
-        if weight + item.weight <= capacity:
-            taken[item.index] = 1
-            value += item.value
-            weight += item.weight
-
-    return value, taken
+from . import Item
+from greedy import solve_greedy
 
 def solve_it_main(capacity, items):
-    # Modify this code to run your optimization algorithm
-    item_count = len(items)
-
-    solns = []
-    solns.append(eval_greedy(items, item_count, capacity))
-    solns.append(eval_greedy(reversed(items), item_count, capacity))
-
-    sorted_by_weight = sorted(items, key=lambda it: it.weight)
-    solns.append(eval_greedy(sorted_by_weight, item_count, capacity))
-
-    sorted_by_value = sorted(items, reverse=True, key=lambda it: it.value )
-    solns.append(eval_greedy(sorted_by_value, item_count, capacity))
-
-    sorted_by_density = sorted(items, reverse=True, key=lambda it: float(it.value) / float(it.weight) )
-    solns.append(eval_greedy(sorted_by_density, item_count, capacity))
-
-    sorted_soln = sorted(solns, reverse=True, key=lambda s: s[0])
-
-    return sorted_soln[0]
+    return solve_greedy(capacity, items)
 
 def parse_input(input_data):
     lines = input_data.split('\n')
@@ -57,7 +24,7 @@ def parse_input(input_data):
     return capacity, items
 
 def format_output(value, taken, optimal=False):
-    opt = 1 if optimal else 0
+    opt = "1" if optimal else "0"
     output_data = str(value) + ' ' + opt + '\n'
     output_data += ' '.join(map(str, taken))
     return output_data

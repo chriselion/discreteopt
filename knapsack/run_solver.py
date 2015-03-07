@@ -15,12 +15,12 @@ def run_on_file(file_location):
 
 if __name__ == '__main__':
     files = [
-        './data/ks_30_0',
-        './data/ks_50_0',
-        './data/ks_200_0',
-        './data/ks_400_0',
-        './data/ks_1000_0',
-        './data/ks_10000_0'
+        './knapsack/data/ks_30_0',
+        './knapsack/data/ks_50_0',
+        './knapsack/data/ks_200_0',
+        './knapsack/data/ks_400_0',
+        './knapsack/data/ks_1000_0',
+        './knapsack/data/ks_10000_0'
     ]
 
     for f in files:
