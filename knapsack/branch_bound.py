@@ -24,13 +24,13 @@ def solve_branch_bound(capacity, items):
     best_val = 0
     best_set = set()
 
-    initial_state = State()
-    initial_state.index = 0
-    stack = [initial_state]
+    current_state = State()
+    current_state.index = 0
+    stack = []
 
     num_steps = 0
 
-    while stack:
+    while True:
         num_steps += 1
         # get "left" state using item
         # get "right" state not using item
@@ -43,7 +43,6 @@ def solve_branch_bound(capacity, items):
             # current state = right
         # else
             # current state = stack.pop()
-        current_state = stack.pop()
 
         #print "Current state: " + str( get_taken(current_state.knapsack, items) )
 
@@ -52,10 +51,15 @@ def solve_branch_bound(capacity, items):
             best_val = current_value
             best_set = current_state.knapsack
 
+        #print "Index: %d  num items: %d" % (current_state.index, len(items))
         if current_state.index >= len(items):
-            # TODO don't get here, pop instead
-            continue
+            if stack:
+                current_state = stack.pop()
+                continue
+            else:
+                break
 
+        #print "Adding nodes"
         l = State()
         l.index = current_state.index+1
         l.knapsack = current_state.knapsack.copy()
@@ -72,13 +76,16 @@ def solve_branch_bound(capacity, items):
             # Push both
             # TODO queue R and update current
             stack.append(r)
-            stack.append(l)
+            current_state = l
         elif l_ok:
-            stack.append(l)
+            current_state = l
         elif r_ok:
-            stack.append(r)
+            current_state = r
         else:
-            pass
+            if stack:
+                current_state = stack.pop()
+            else:
+                break
 
     end_time = time.time();
     print "Branch and Bound for %d items searched %d nodes in %f seconds" % (len(items), num_steps, end_time - start_time)

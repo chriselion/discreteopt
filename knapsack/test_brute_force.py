@@ -10,6 +10,7 @@ def load_input_data(fileLocation):
     return inputData
 
 def run_on_file(file_location):
+    print file_location
     input_data = load_input_data(file_location)
     capacity, items = parse_input(input_data)
     print "BRUTE FORCE"
@@ -25,6 +26,7 @@ def run_on_file(file_location):
 
 if __name__ == '__main__':
     files = [
+        './knapsack/data/ks_4_0',
         './knapsack/data/ks_19_0',
     ]
 

@@ -42,7 +42,7 @@ def run_on_file(file_location):
 
 if __name__ == '__main__':
     files = [
-        #'./knapsack/data/ks_4_0',
+        './knapsack/data/ks_4_0',
         './knapsack/data/ks_19_0',
     ]
 
