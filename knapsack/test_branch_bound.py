@@ -44,6 +44,9 @@ if __name__ == '__main__':
     files = [
         './knapsack/data/ks_4_0',
         './knapsack/data/ks_19_0',
+        './knapsack/data/ks_30_0',
+        './knapsack/data/ks_40_0',
+
     ]
 
     for f in files:

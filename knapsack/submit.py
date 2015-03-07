@@ -6,6 +6,7 @@ import urllib2
 import hashlib
 import email.message
 import email.encoders
+import os
 
 import time
 from collections import namedtuple
@@ -35,7 +36,7 @@ def check_login(metadata, login, password):
 
 def load_meta_data():
     try:
-        metadata_file = open('_metadata', 'r')
+        metadata_file = open(os.path.join('knapsack', '_metadata'), 'r')
         
         url = metadata_file.readline().strip()
         name = metadata_file.readline().strip()
@@ -202,15 +203,15 @@ def get_source(source_file):
     return src
 
 
-try:
-    pkg = __import__('solver')
-    if not hasattr(pkg, 'solve_it'):
-        print 'the solve_it() function was not found in solver.py'
-        quit()
-    solve_it = pkg.solve_it
-except ImportError:
-    print 'solver.py was not found in the python path.'
-    quit()
+# try:
+#     pkg = __import__('solver')
+#     if not hasattr(pkg, 'solve_it'):
+#         print 'the solve_it() function was not found in solver.py'
+#         quit()
+#     solve_it = pkg.solve_it
+# except ImportError:
+#     print 'solver.py was not found in the python path.'
+#     quit()
 
 
 def load_input_data(fileLocation):
@@ -218,6 +219,8 @@ def load_input_data(fileLocation):
     inputData = ''.join(inputDataFile.readlines())
     inputDataFile.close()
     return inputData
+
+from solver import solve_it
 
 def output(part):
     """Use student code to compute the output for test cases."""

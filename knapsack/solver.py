@@ -3,9 +3,10 @@
 
 from . import Item
 from greedy import solve_greedy
+from branch_bound import solve_branch_bound
 
 def solve_it_main(capacity, items):
-    return solve_greedy(capacity, items)
+    return solve_branch_bound(capacity, items)
 
 def parse_input(input_data):
     lines = input_data.split('\n')
@@ -34,7 +35,7 @@ def solve_it(input_data):
     value, taken = solve_it_main(capacity, items)
 
     # prepare the solution in the specified output format
-    return format_output(value, taken)
+    return format_output(value, taken, True)
 
 import sys
 
