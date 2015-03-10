@@ -1,0 +1,10 @@
+optimization-003
+Graph Coloring
+6
+upNcCDtk, ./coloring/data/gc_50_3, coloring/solver.py, Coloring Problem 1
+Cy6WMCm7, ./coloring/data/gc_70_7, coloring/solver.py, Coloring Problem 2
+UOKSlXMq, ./coloring/data/gc_100_5, coloring/solver.py, Coloring Problem 3
+ecjBwfpP, ./coloring/data/gc_250_9, coloring/solver.py, Coloring Problem 4
+a10G1b1U, ./coloring/data/gc_500_1, coloring/solver.py, Coloring Problem 5
+pIzekcCG, ./coloring/data/gc_1000_5, coloring/solver.py, Coloring Problem 6
+
