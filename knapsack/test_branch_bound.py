@@ -14,7 +14,7 @@
 # [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
 
 from solver import parse_input
-from branch_bound import solve_branch_bound
+from branch_bound import solve_branch_bound, solve_branch_a_star
 from greedy import solve_greedy
 
 #copied from submit
@@ -35,11 +35,16 @@ def run_on_file(file_location):
 
 
 if __name__ == '__main__':
-    files = [
-        #'./knapsack/data/ks_4_0',
-        #'./knapsack/data/ks_19_0',
+    test_files = [
+        './knapsack/data/ks_4_0',
+        './knapsack/data/ks_19_0',
         './knapsack/data/ks_30_0',
-        #'./knapsack/data/ks_40_0',
+        './knapsack/data/ks_40_0',
+        './knapsack/data/ks_50_0',
+    ]
+
+    submit_files = [
+        './knapsack/data/ks_30_0',
         './knapsack/data/ks_50_0',
         './knapsack/data/ks_200_0',
         './knapsack/data/ks_400_0',
@@ -47,5 +52,5 @@ if __name__ == '__main__':
         './knapsack/data/ks_10000_0',
     ]
 
-    for f in files:
+    for f in submit_files:
         run_on_file(f)

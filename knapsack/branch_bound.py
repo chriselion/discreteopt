@@ -1,6 +1,7 @@
 from . import Item
 import time
 from greedy import solve_greedy
+from heapq import heappush, heappop
 
 class State:
     def __init__(self):
@@ -75,7 +76,7 @@ def get_taken(knapsack, items):
 def solve_branch_bound(capacity, items_unsorted):
     greedy_val, greedy_taken = solve_greedy(capacity, items_unsorted)
 
-    items = sorted(items_unsorted, reverse=True, key=lambda it: float(it.value) / float(it.weight) )
+    items = sorted(items_unsorted, reverse=True, key=lambda it: float(it.value) / float(it.weight))
     start_time = time.time()
     best_val = greedy_val
     best_node = None
@@ -153,6 +154,75 @@ def solve_branch_bound(capacity, items_unsorted):
 
     end_time = time.time()
     print "Branch and Bound for %d items searched %d nodes in %f seconds" % (len(items), num_steps, end_time - start_time)
+    if best_node:
+        best_set = best_node.compute_knapsack()
+        taken = get_taken(best_set, items)
+    else:
+        taken = greedy_taken
+
+    return best_val, taken
+
+
+def solve_branch_a_star(capacity, items_unsorted):
+    greedy_val, greedy_taken = solve_greedy(capacity, items_unsorted)
+
+    items = sorted(items_unsorted, reverse=True, key=lambda it: float(it.value) / float(it.weight))
+    start_time = time.time()
+    best_val = greedy_val
+    best_node = None
+
+    current_state = State()
+    current_state.index = 0
+    cur_val = current_state.get_best_case(capacity, items)
+
+    heap = []
+    heappush(heap, (-cur_val, current_state))
+
+    num_steps = 0
+
+    while True:
+        num_steps += 1
+        if not heap:
+            break
+
+        t = heappop(heap)
+        current_state = t[1]
+
+        if current_state.get_best_case < best_val:
+            break
+
+        #print "Current state: " + str( get_taken(current_state.knapsack, items) )
+
+        current_value = current_state.get_value()
+        if current_value > best_val:
+            best_val = current_value
+            best_node = current_state
+
+        if current_state.index >= len(items):
+            continue
+
+        #print "Adding nodes"
+        l = State()
+        l.index = current_state.index+1
+        l.total_value = current_state.total_value + items[current_state.index].value
+        l.total_weight = current_state.total_weight + items[current_state.index].weight
+        l.parent = current_state
+        l.current_item = items[current_state.index]
+
+        r = State()
+        r.index = current_state.index+1
+        r.total_value = current_state.total_value
+        r.total_weight = current_state.total_weight
+        r.parent = current_state
+        r.current_item = None
+
+        for n in [l, r]:
+            if not n.is_valid(best_val, capacity, items):
+                continue
+            heappush(heap, (-n.best_case, n))
+
+    end_time = time.time()
+    print "Branch and Bound A* for %d items searched %d nodes in %f seconds" % (len(items), num_steps, end_time - start_time)
     if best_node:
         best_set = best_node.compute_knapsack()
         taken = get_taken(best_set, items)
