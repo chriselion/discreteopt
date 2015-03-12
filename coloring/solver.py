@@ -1,10 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from greedy import solve_greedy
 
-def solve_it(input_data):
-    # Modify this code to run your optimization algorithm
-
+def parse_input(input_data):
     # parse the input
     lines = input_data.split('\n')
 
@@ -17,17 +16,29 @@ def solve_it(input_data):
         line = lines[i]
         parts = line.split()
         edges.append((int(parts[0]), int(parts[1])))
+    return node_count, edges
 
-    # build a trivial solution
-    # every node has its own color
-    solution = range(0, node_count)
-
+def format_output(num_colors, is_optimal, solution):
     # prepare the solution in the specified output format
-    output_data = str(node_count) + ' ' + str(0) + '\n'
+    opt = '1' if is_optimal else '0'
+    output_data = str(num_colors) + ' ' + opt + '\n'
     output_data += ' '.join(map(str, solution))
 
     return output_data
 
+def solve_trivial(node_count, edges):
+    # build a trivial solution
+    # every node has its own color
+    solution = range(0, node_count)
+    num_colors = node_count
+
+    return num_colors, solution
+
+
+def solve_it(input_data):
+    node_count, edges = parse_input(input_data)
+    num_colors, solution = solve_greedy(node_count, edges)
+    return format_output(num_colors, False, solution)
 
 import sys
 
