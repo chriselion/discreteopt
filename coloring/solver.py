@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from greedy import solve_greedy
+from dsatur import solve_dsatur
+from iter_greedy import solve_iter_greedy
 
 def parse_input(input_data):
     # parse the input
@@ -37,7 +39,7 @@ def solve_trivial(node_count, edges):
 
 def solve_it(input_data):
     node_count, edges = parse_input(input_data)
-    num_colors, solution = solve_greedy(node_count, edges)
+    num_colors, solution = solve_iter_greedy(node_count, edges)
     return format_output(num_colors, False, solution)
 
 import sys

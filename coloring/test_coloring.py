@@ -3,6 +3,7 @@ from solver import parse_input
 from greedy import solve_greedy
 from min_conflict import solve_min_conflict
 from dsatur import solve_dsatur
+from iter_greedy import solve_iter_greedy
 import argparse
 
 #copied from submit
@@ -45,7 +46,7 @@ if __name__ == '__main__':
     ]
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--method", default="greedy", choices=["greedy", "min_conflict", "dsatur"])
+    parser.add_argument("--method", default="greedy", choices=["greedy", "min_conflict", "dsatur", "iter_greedy"])
     args = parser.parse_args()
 
     for f in submit_files:
