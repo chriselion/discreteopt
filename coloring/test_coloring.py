@@ -1,6 +1,8 @@
 import time
 from solver import parse_input
 from greedy import solve_greedy
+from min_conflict import solve_min_conflict
+import argparse
 
 #copied from submit
 def load_input_data(fileLocation):
@@ -9,23 +11,26 @@ def load_input_data(fileLocation):
     inputDataFile.close()
     return inputData
 
-def run_on_file(file_location):
+def run_on_file(file_location, args):
     #print "\n" + file_location
     input_data = load_input_data(file_location)
     num_nodes, edges = parse_input(input_data)
 
     start_time = time.time()
-    num_colors, coloring = solve_greedy(num_nodes, edges)
+    #num_colors, coloring = solve_min_conflict(num_nodes, edges)
+    num_colors, coloring = eval("solve_%s(num_nodes, edges)" % args.method)
     end_time = time.time()
 
-    print "Greedy solver for %s took %f seconds. Best coloring is %d colors" % (file_location, end_time-start_time, num_colors)
+    print "MinConflict solver for %s took %f seconds. Best coloring is %d colors" % (file_location, end_time-start_time, num_colors)
 
 
 if __name__ == '__main__':
     test_files = [
-        './coloring/data/gc_4_1',
-        './coloring/data/gc_20_1',
-        './coloring/data/gc_50_3',
+        #'./coloring/data/gc_4_1',
+        #'./coloring/data/gc_20_1',
+        './coloring/data/gc_20_3',
+        #'./coloring/data/gc_20_1',
+        #'./coloring/data/gc_50_3',
     ]
 
     submit_files = [
@@ -37,5 +42,9 @@ if __name__ == '__main__':
         './coloring/data/gc_1000_5'
     ]
 
-    for f in submit_files:
-        run_on_file(f)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--method", default="greedy", choices=["greedy", "min_conflict"])
+    args = parser.parse_args()
+
+    for f in test_files:
+        run_on_file(f, args)
