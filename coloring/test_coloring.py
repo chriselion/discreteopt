@@ -29,11 +29,12 @@ def run_on_file(file_location, args):
 
 if __name__ == '__main__':
     test_files = [
-        './coloring/data/gc_4_1',
-        './coloring/data/gc_20_1',
-        './coloring/data/gc_20_3',
-        './coloring/data/gc_20_1',
         './coloring/data/gc_50_3',
+        './coloring/data/gc_70_7',
+        './coloring/data/gc_100_5',
+        './coloring/data/gc_250_9',
+        './coloring/data/gc_500_1',
+        #'./coloring/data/gc_1000_5'
     ]
 
     submit_files = [

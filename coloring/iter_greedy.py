@@ -27,6 +27,7 @@ class ReorderableGraph(object):
 class Coloring(object):
     def __init__(self):
         self.colors = {}
+        self.colored_nodes = set()
         """:type : dict[ReorderableNode, int] """
 
     def realize(self, g):
@@ -35,11 +36,18 @@ class Coloring(object):
             colors[node.original_index] = self.colors[node]
         return colors
 
+    def color_node(self, node, c):
+        self.colors[node] = c
+        self.colored_nodes.add(node)
+
+    def get_neighbor_colors(self, node):
+        return set( self.colors.get(e) for e in node.edges & self.colored_nodes )
+
 def solve_iter_greedy(node_count, edges):
     random.seed(node_count)
     num_colors, colors = solve_dsatur(node_count, edges)
 
-    num_iter = 2000
+    num_iter = 5000
     g = ReorderableGraph(node_count, edges)
     coloring = Coloring()
     for node, c in zip(g.nodes, colors):
@@ -49,6 +57,7 @@ def solve_iter_greedy(node_count, edges):
         color_class = defaultdict(set)
         for node, c in coloring.colors.viewitems():
             color_class[c].add(node)
+
         grouped_by_color = list(color_class.values())
         random.shuffle(grouped_by_color)
         # flatten the list of sets
@@ -59,13 +68,13 @@ def solve_iter_greedy(node_count, edges):
         # Now do a greedy pass with this ordering
         coloring = Coloring()
         for node in g.nodes:
-            neighbor_colors = set( coloring.colors.get(e) for e in node.edges ) - set([None])
+            neighbor_colors = coloring.get_neighbor_colors(node)
             for c in xrange(0, len(node.edges)+1):
                 if c not in neighbor_colors:
-                    coloring.colors[node] = c
+                    coloring.color_node(node, c)
                     break
 
-            assert node in coloring.colors
+            #assert node in coloring.colors
 
     colors = coloring.realize(g)
     num_colors = len(set(colors))
