@@ -1,18 +1,24 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import math
-from collections import namedtuple
+from . import length, Point, tour_length
 
-Point = namedtuple("Point", ['x', 'y'])
+def format_output(path, path_length, is_optimal=False):
+    obj = path_length
+    opt = "1" if is_optimal else "0"
 
-def length(point1, point2):
-    return math.sqrt((point1.x - point2.x)**2 + (point1.y - point2.y)**2)
+    # prepare the solution in the specified output format
+    output_data = str(obj) + ' ' + opt + '\n'
+    output_data += ' '.join(map(str, path))
 
-def solve_it(input_data):
-    # Modify this code to run your optimization algorithm
+def solve_trivial(points):
+    # build a trivial solution
+    # visit the nodes in the order they appear in the file
+    path =  range(0, len(points))
+    path_length = tour_length(path, points)
+    return path, path_length
 
-    # parse the input
+def parse_input(input_data):
     lines = input_data.split('\n')
 
     nodeCount = int(lines[0])
@@ -22,20 +28,15 @@ def solve_it(input_data):
         line = lines[i]
         parts = line.split()
         points.append(Point(float(parts[0]), float(parts[1])))
+    return points
 
-    # build a trivial solution
-    # visit the nodes in the order they appear in the file
-    solution = range(0, nodeCount)
 
-    # calculate the length of the tour
-    obj = length(points[solution[-1]], points[solution[0]])
-    for index in range(0, nodeCount-1):
-        obj += length(points[solution[index]], points[solution[index+1]])
+def solve_it(input_data):
+    points = parse_input(input_data)
 
-    # prepare the solution in the specified output format
-    output_data = str(obj) + ' ' + str(0) + '\n'
-    output_data += ' '.join(map(str, solution))
+    path, path_length = solve_trivial(points)
 
+    output_data = format_output(path, path_length)
     return output_data
 
 
