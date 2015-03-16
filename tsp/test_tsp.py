@@ -28,8 +28,8 @@ if __name__ == '__main__':
         './tsp/data/tsp_51_1',
         './tsp/data/tsp_100_3',
         './tsp/data/tsp_200_2',
-        # './tsp/data/tsp_574_1',
-        # './tsp/data/tsp_1889_1',
+        './tsp/data/tsp_574_1',
+        './tsp/data/tsp_1889_1',
         # './tsp/data/tsp_33810_1'
     ]
 

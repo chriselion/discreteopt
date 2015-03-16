@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import length, Point, tour_length
+from greedy import solve_greedy
 
 def format_output(path, path_length, is_optimal=False):
     obj = path_length
@@ -10,6 +11,7 @@ def format_output(path, path_length, is_optimal=False):
     # prepare the solution in the specified output format
     output_data = str(obj) + ' ' + opt + '\n'
     output_data += ' '.join(map(str, path))
+    return output_data
 
 def solve_trivial(points):
     # build a trivial solution
@@ -34,7 +36,7 @@ def parse_input(input_data):
 def solve_it(input_data):
     points = parse_input(input_data)
 
-    path, path_length = solve_trivial(points)
+    path, path_length = solve_greedy(points)
 
     output_data = format_output(path, path_length)
     return output_data
