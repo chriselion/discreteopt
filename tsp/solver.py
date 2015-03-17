@@ -3,6 +3,7 @@
 
 from . import length, Point, tour_length
 from greedy import solve_greedy
+from opt2 import solve_2opt_brute_force
 
 def format_output(path, path_length, is_optimal=False):
     obj = path_length
@@ -36,7 +37,7 @@ def parse_input(input_data):
 def solve_it(input_data):
     points = parse_input(input_data)
 
-    path, path_length = solve_greedy(points)
+    path, path_length = solve_2opt_brute_force(points)
 
     output_data = format_output(path, path_length)
     return output_data
