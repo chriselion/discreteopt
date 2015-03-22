@@ -1,7 +1,7 @@
 import time
 from solver import parse_input, solve_trivial
 from greedy import solve_greedy
-from opt2 import solve_2opt_brute_force
+from opt2 import solve_2opt_brute_force, solve_2opt_rand
 import argparse
 
 #copied from submit
@@ -28,11 +28,12 @@ if __name__ == '__main__':
     test_files = [
         #'./tsp/data/tsp_5_1',
         #'./tsp/data/tsp_10_1',
-        './tsp/data/tsp_51_1',
-         './tsp/data/tsp_100_3',
-         './tsp/data/tsp_200_2',
+        #'./tsp/data/tsp_51_1',
+        # './tsp/data/tsp_100_3',
+        # './tsp/data/tsp_200_2',
          './tsp/data/tsp_574_1',
          './tsp/data/tsp_1889_1',
+         './tsp/data/tsp_2319_1',
         # './tsp/data/tsp_33810_1'
     ]
 
@@ -46,7 +47,7 @@ if __name__ == '__main__':
     ]
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--method", default="trivial", choices=["trivial", "greedy", "2opt_brute_force"])
+    parser.add_argument("--method", default="trivial", choices=["trivial", "greedy", "2opt_brute_force", "2opt_rand"])
     parser.add_argument("--files", default="test", choices=["test", "submit",])
     args = parser.parse_args()
 
